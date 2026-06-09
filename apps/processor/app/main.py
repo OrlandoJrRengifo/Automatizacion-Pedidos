@@ -63,14 +63,14 @@ def procesar_base64(
 
 
 # --- Lógica compartida ---
-async def _procesar_y_enviar(contenido: bytes) -> dict:
+def _procesar_y_enviar(contenido: bytes) -> dict:
     try:
         pedido = parsear_excel(contenido)
     except ValueError as e:
         raise HTTPException(status_code=422, detail=str(e))
 
     try:
-        respuesta = await requests.post(
+        respuesta = requests.post(
             f"{BACKEND_URL}/pedidos",
             json=pedido,
             headers={

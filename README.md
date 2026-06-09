@@ -10,6 +10,7 @@ React Dashboard
 ## Stack
 
 | Capa | Tecnología |
+|---|---|
 | Frontend | React + Vite + Tailwind |
 | Backend | NestJS + Prisma |
 | Procesador | FastAPI + pandas |

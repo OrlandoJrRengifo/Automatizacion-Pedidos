@@ -1,0 +1,20 @@
+{
+  "dependencies": {
+    "@nestjs/common": "^11.1.26",
+    "@nestjs/core": "^11.1.26",
+    "@nestjs/platform-express": "^11.1.26",
+    "@nestjs/swagger": "^11.4.4",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.15.1"
+  },
+  "devDependencies": {
+    "@prisma/client": "^6.19.3",
+    "@types/node": "^25.9.2",
+    "prisma": "^6.19.3",
+    "ts-node": "^10.9.2",
+    "typescript": "^6.0.3"
+  },
+  "scripts": {
+    "start:dev": "nest start --watch"
+  }
+}

@@ -11,7 +11,7 @@ async function bootstrap() {
   app.enableCors({
     origin: frontendUrl 
       ? [frontendUrl, 'http://localhost:5173'] 
-      : '*', // Si por alguna razón no existe la variable, permite cualquiera temporalmente
+      : '*', 
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
   });

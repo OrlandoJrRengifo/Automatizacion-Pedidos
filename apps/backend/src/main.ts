@@ -6,11 +6,14 @@ import { AppModule } from './app.module';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  const frontendUrl = process.env.FRONTEND_URL;
+
   app.enableCors({
-    origin: [
-      'http://localhost:5173',
-      'https://automatizacion-pedidos.vercel.app',
-    ],
+    origin: frontendUrl 
+      ? [frontendUrl, 'http://localhost:5173'] 
+      : '*', // Si por alguna razón no existe la variable, permite cualquiera temporalmente
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
   });
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
 

@@ -1,6 +1,8 @@
 # Automatizacion-Pedidos
-Automatización del proceso de recepción de pedidos de repuestos de autopartes
-vía correo electrónico, usando Power Automate, Python y NestJS.
+
+Automatización del proceso de recepción de pedidos de repuestos de autopartes vía correo electrónico, usando Power Automate, Python y NestJS.
+
+
 
 ## Arquitectura
 Correo → Power Automate → FastAPI (Python) → NestJS → Supabase
@@ -16,62 +18,48 @@ React Dashboard
 | Procesador | FastAPI + pandas |
 | Base de datos | Supabase (PostgreSQL) |
 | Automatización | Power Automate |
-| Deploy frontend | Vercel |
-| Deploy backend/processor | Koyeb |
+| Deploy | Railway |
 
-## Requisitos
+## Variables de Entorno
+Para que la aplicación funcione, crea un archivo `.env` en cada carpeta correspondiente (`apps/backend/`, `apps/processor/`, `apps/frontend/`) con las siguientes variables:
 
-- Node.js 20+
-- Python 3.11+
-- npm o pnpm
-- Prisma v6
+### Backend (`apps/backend/.env`)
+| Variable | Descripción |
+| :--- | :--- |
+| `DATABASE_URL` | URL de conexión a Supabase (PostgreSQL). |
+| `API_KEY` | Llave secreta para autorizar peticiones. |
 
-## Configuración inicial
+### Processor (`apps/processor/.env`)
+| Variable | Descripción |
+| :--- | :--- |
+| `BACKEND_URL` | URL donde corre el backend. |
+| `API_KEY` | La misma llave secreta definida en el backend. |
 
-Clona el repo y copia los archivos de entorno:
+### Frontend (`apps/frontend/.env`)
+| Variable | Descripción |
+| :--- | :--- |
+| `VITE_API_URL` | URL base de tu API Backend. |
 
-```bash
-git clone https://github.com/tu-usuario/Automatizacion-Pedidos.git
-cd order-intake-automation
+---
 
-cp apps/backend/.env.example   apps/backend/.env
-cp apps/processor/.env.example apps/processor/.env
-cp apps/frontend/.env.example  apps/frontend/.env
-```
+## Flujo de Recepción (Power Automate)
+Para que la automatización procese los pedidos correctamente:
 
-## Backend (NestJS)
+1. **Destino:** El correo debe ser enviado a la cuenta configurada en el conector de Outlook.
+2. **Asunto:** Debe contener la palabra **"Pedido"** (ej. "Pedido de repuestos - Junio").
+3. **Archivo Adjunto:** Incluir un Excel (.xlsx) con la siguiente estructura:
 
-```bash
-cd apps/backend
-npm install
-npx prisma generate
-npx prisma db push
-npm run start:dev
-```
+| Cliente | Correo | SKU | Descripcion | Cantidad | Precio_Unitario |
+|---|---|---|---|---|---|
+| Nombre | correo@ejemplo.com | IND-001 | Repuesto X | 10 | 1500.00 |
 
-Corre en `http://localhost:3000`
+*Nota: La primera fila de datos define el cliente y correo de contacto.*
 
-## Processor (FastAPI)
-
-```bash
-cd apps/processor
-python -m venv venv
-source venv/bin/activate       
-pip install -r requirements.txt
-uvicorn app.main:app --reload --port 8000
-```
-
-Corre en `http://localhost:8000`
-
-## Frontend (React)
-
-```bash
-cd apps/frontend
-npm install
-npm run dev
-```
-
-Corre en `http://localhost:5173`
+## Despliegue (Producción)
+Los servicios están desplegados en [Railway](https://railway.app/).
+- **Dashboard:** https://automatizacion-pedidos.up.railway.app/
+- **API Backend:** https://automatizacion-pedidos-production.up.railway.app/
+- **API Processor:** https://servicio-python.up.railway.app/
 
 ## Endpoints principales
 

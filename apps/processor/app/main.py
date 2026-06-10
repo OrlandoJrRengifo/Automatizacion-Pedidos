@@ -54,14 +54,19 @@ def procesar_base64(
     if x_api_key != API_KEY:
         raise HTTPException(status_code=401, detail="API key inválida")
 
+    content_clean = payload.content.strip()
+    
+    if ',' in content_clean:
+        content_clean = content_clean.split(',')[1]
+
     try:
-        # cortar encabezado "data:...;base64," si lo trae
-        string_base64 = payload.content
-        if "," in string_base64:
-            string_base64 = string_base64.split(",")[-1]
-        contenido = base64.b64decode(string_base64)
-    except Exception:
-        raise HTTPException(status_code=400, detail="El contenido base64 no es válido")
+        contenido = base64.b64decode(content_clean)
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Base64 inválido: {str(e)}")
+
+    # Verifica que sea un ZIP/Excel real (magic bytes)
+    if not contenido[:4] in [b'PK\x03\x04', b'PK\x05\x06', b'PK\x07\x08']:
+        raise HTTPException(status_code=400, detail=f"El contenido decodificado no es un Excel válido. Primeros bytes: {contenido[:20]}")
 
     return _procesar_y_enviar(contenido)
 

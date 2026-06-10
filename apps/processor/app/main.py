@@ -54,13 +54,8 @@ def procesar_base64(
     if x_api_key != API_KEY:
         raise HTTPException(status_code=401, detail="API key inválida")
 
-    content_clean = payload.content.strip()
-    
-    if ',' in content_clean:
-        content_clean = content_clean.split(',')[1]
-
     try:
-        contenido = base64.b64decode(content_clean)
+        contenido = base64.b64decode(payload.content.strip())
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"Base64 inválido: {str(e)}")
 

@@ -55,7 +55,11 @@ def procesar_base64(
         raise HTTPException(status_code=401, detail="API key inválida")
 
     try:
-        contenido = base64.b64decode(payload.content)
+        # cortar encabezado "data:...;base64," si lo trae
+        string_base64 = payload.content
+        if "," in string_base64:
+            string_base64 = string_base64.split(",")[-1]
+        contenido = base64.b64decode(string_base64)
     except Exception:
         raise HTTPException(status_code=400, detail="El contenido base64 no es válido")
 
